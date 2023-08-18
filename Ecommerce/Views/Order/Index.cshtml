@@ -1,0 +1,159 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<head>
+    <!--Font Awesome Icon-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255,255,255,0.5);
+            z-index: 999;
+        }
+
+        .custom-title {
+            margin-top: 20px;
+            padding: 10px;
+            margin-left: 200px;
+        }
+        .container-custom{
+            width: 40%; 
+            padding: 20px;
+            border-radius: 20px;
+            
+        }
+
+        .button-custom-remove {
+            border: none;
+            background: none;
+            padding: 0;
+            cursor: pointer;
+            outline: none;
+            font-size: 28px;
+            margin-left:15px;
+        }
+
+        .custom-order-button{
+            border: none;
+            background: none;
+            padding: 3px;
+            cursor: pointer;
+            outline: none;
+            font-size: 35px;
+            margin-left: 600px;
+        }
+        .custom-size{
+            font-size:25px;
+            margin-left: 600px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<div class="container">
+    <h1 class="custom-title">Order</h1>
+    <div class="container-custom">
+        <div id="loading">
+            <img src="/Loader.gif" />
+        </div>
+        <div id="cardList"></div>
+        <p class="custom-size">Total:<span id="totalPrice">0</span></p>
+    </div>
+</div>
+
+<script>
+    window.addEventListener('load', fg_load);
+    function fg_load() {
+        document.getElementById('loading').style.display = 'none';
+
+    }
+
+    const card = JSON.parse(localStorage.getItem("items")) || []; 
+    const cardList = document.querySelector("#cardList");
+    const totalPriceElement = document.querySelector("#totalPrice");
+
+    var itemCount = document.getElementById("item-count");
+    function updateCartItemCount() {
+        itemCount.textContent = card.length;
+    }
+    updateCartItemCount();
+     
+    function updateTotalPrice() {
+        const totalPrice = parseFloat(card.reduce((total, item) => parseFloat(total) + parseFloat(item.price), 0));
+        totalPriceElement.textContent = totalPrice;
+    }
+
+    for (let i = 0; i < card.length; i++) {
+        const row = document.createElement("section");
+        row.className="order mt-5";row.style="margin-left:200px;border:3px solid orange;border-radius:20px;padding:5px;";
+        const nameCell = document.createElement("div");
+        nameCell.className="container";
+        const priceCell = document.createElement("div");
+        priceCell.className="row";priceCell.style="margin-left:150px";
+        const remove = document.createElement("div");
+        remove.className="col-lg-3 custom-title-order";
+        const cardListDiv = document.createElement('div');
+        cardListDiv.id = "cardList";
+        const button = document.createElement("button");
+        button.className="button-custom-remove";
+        const icon = document.createElement("i");
+        icon.classList.add("fas", "fa-trash");
+        icon.style.color = "#e68a0a";
+        button.appendChild(icon);
+        document.body.appendChild(button);
+
+        nameCell.textContent = card[i].name;
+        priceCell.textContent = card[i].price;
+
+        
+        button.addEventListener("click", function () {
+            var OK = confirm("Are you sure?");
+            if (OK == true) {
+                cardList.removeChild(row);
+                card.splice(i, 1);
+                updateTotalPrice();
+                localStorage.setItem("items", JSON.stringify(card));
+                updateCartItemCount();
+                fg_load();
+            }
+        });
+
+        row.appendChild(nameCell);
+        row.appendChild(priceCell);
+        row.appendChild(button);
+
+        cardList.appendChild(row);
+        updateTotalPrice();
+
+        updateCartItemCount();
+        
+    }
+
+    const orderButtonRow = document.createElement("section");
+    const orderButtonCell = document.createElement("div");
+    const orderButton = document.createElement("button");
+    orderButton.className="custom-order-button";
+    const icon = document.createElement("i");
+    icon.classList.add("fa-solid", "fa-thumbs-up");
+    icon.style.color = "#e68a0a";
+    orderButton.appendChild(icon);
+    document.body.appendChild(orderButton);
+    orderButton.style.padding = "10px 20px";
+    orderButton.addEventListener("click", function () {
+        localStorage.removeItem("items");
+        location.reload();
+        alert("Your order has been received!");
+    });
+
+    orderButtonCell.appendChild(orderButton);
+    orderButtonRow.appendChild(orderButtonCell);
+    cardList.appendChild(orderButtonRow);
+</script>

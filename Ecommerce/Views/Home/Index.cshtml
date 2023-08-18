@@ -1,0 +1,119 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    .custom-slider{
+        width: 800px;
+        height: 500px;
+        margin: auto;
+    }
+
+    .popup-container {
+        display: inline-flex;
+        justify-content: center; /* İçeriği yatayda ortalar */
+        align-items: center;
+    }
+
+    .popup {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 10;
+        opacity: 1;
+        visibility: visible;
+        transition: 400ms all;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .custom-popup{
+        width: 600px;
+        height: auto;
+    }
+</style>
+<div class="popup-container">
+    <div class="popup">
+        <button class="close-button">Close</button>
+        <a href="Home">
+            <img src="~/pop-up.jpg" alt="Adv" class="custom-popup">
+        </a>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var popupIsVisible = true;
+
+        $(document).on("click", function (event) {
+            if (popupIsVisible && !$(event.target).closest(".popup").length) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+        });
+        $(".popup").on("click", "a", function (event) {
+            event.stopPropagation();
+        });
+        $(".popup").show();
+        $(".close-button").click(function () {
+            $(".popup").hide();
+            popupIsVisible = false;
+        });
+    });
+</script>
+<div id="carouselExampleCaptions" class="carousel slide custom-slider">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <a href="Category/FastFoodDetail"><img src="~/fastFood.jpg" class="d-block custom-slider"></a>
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Fast Food</h5>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <a href="Category/JunkFoodDetail"><img src="~/junkFood.jpg" class="d-block custom-slider"></a>
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Junk Food</h5>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <a href="Category/CleaningDetail"><img src="~/cleaning.jpg" class="d-block custom-slider"></a>
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Cleaning</h5>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <a href="Category/ToysDetail"><img src="~/toys.jpg" class="d-block custom-slider"></a>
+            <div class="carousel-caption d-none d-md-block">
+                <h5 class="text-dark">Toys for children</h5>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+

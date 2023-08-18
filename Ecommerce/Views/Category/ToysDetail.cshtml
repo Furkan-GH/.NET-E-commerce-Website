@@ -1,0 +1,97 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<head>
+    <!--Font Awesome Icon-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .button-custom-cart {
+            border: none;
+            background: none;
+            padding: 0;
+            cursor: pointer;
+            outline: none;
+            font-size: 24px;
+        }
+
+        .custom-title {
+            margin-top: 20px;
+            padding: 10px;
+            margin-left: 200px;
+        }
+
+        .custom-title-product {
+            margin-left: 200px;
+        }
+    </style>
+</head>
+@model List<ToysDetail>
+<div class="container">
+    <h1 class="custom-title">Fast Food Products</h1>
+    @foreach (var ToysDetail in Model)
+    {
+        <section class="products mt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 custom-title-product">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    @ToysDetail.Name
+                                </h5>
+                                <div class="d-flex justify-content-between">
+                                    <button type="submit" class="addToLocalStorage button-custom-cart"
+                                            data-id="@ToysDetail.Id"
+                                            data-name="@ToysDetail.Name"
+                                            data-price="@ToysDetail.Price">
+                                        <i class="fa-solid fa-cart-plus" style="color: #e68a0a;"></i>
+                                    </button>
+                                    <span class="price badge rounded-pill bg-warning text-dark d-flex align-items-center">
+                                        @ToysDetail.Price
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var addToLocalStorageButtons = document.querySelectorAll(".addToLocalStorage");
+
+        var itemCountElement = document.getElementById("item-count");
+        function updateCartItemCount() {
+            var cart = JSON.parse(localStorage.getItem("items")) || [];
+            itemCountElement.textContent = cart.length;
+        }
+        updateCartItemCount();
+
+        addToLocalStorageButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                var itemId = button.getAttribute("data-id");
+                var itemName = button.getAttribute("data-name");
+                var itemPrice = button.getAttribute("data-price");
+
+                var item = {
+                    id: itemId,
+                    name: itemName,
+                    price: itemPrice
+                };
+
+                var existingItems = JSON.parse(localStorage.getItem("items")) || [];
+                existingItems.push(item);
+
+                localStorage.setItem("items", JSON.stringify(existingItems));
+                console.log("Item added to local storage:", item);
+
+
+                updateCartItemCount();
+            });
+        });
+    });
+</script>
